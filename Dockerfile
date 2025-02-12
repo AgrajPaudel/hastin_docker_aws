@@ -42,8 +42,7 @@ RUN pip uninstall -y torchvision torch torchsde torchaudio xformers transformers
     pip install torchvision torch==2.5.1 torchsde torchaudio transformers==4.45.2
 
 # Install dependencies from the GitHub repo
-RUN pip install -r /workspace/hastin_docker/requirements.txt && \
-    pip install -r /workspace/hastin_docker/mixlab_requirements.txt
+RUN pip install -r /workspace/hastin_docker/requirements.txt 
 
 # NGINX Proxy Setup
 COPY --from=proxy nginx.conf /etc/nginx/nginx.conf
