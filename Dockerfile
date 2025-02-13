@@ -1,6 +1,7 @@
 # Import necessary base images
 FROM nvidia/cuda:11.8.0-base-ubuntu22.04 as runtime
-
+FROM runpod/stable-diffusion:models-1.0.0 as sd-models
+FROM runpod/stable-diffusion-models:2.1 as hf-cache
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Set environment variables
@@ -47,11 +48,10 @@ RUN pip install -r /workspace/hastin_docker/requirements.txt
 # NGINX Proxy Setup
 COPY --from=proxy nginx.conf /etc/nginx/nginx.conf
 COPY --from=proxy readme.html /usr/share/nginx/html/readme.html
-COPY README.md /usr/share/nginx/html/README.md
 
 # Copy `start.sh` and `pre_start.sh` from cloned repo
 COPY /workspace/hastin_docker/pre_start.sh /pre_start.sh
-COPY /workspace/hastin_docker/start.sh /start.sh
+COPY --from=scripts start.sh /
 RUN chmod +x /start.sh /pre_start.sh
 
 # Start container
